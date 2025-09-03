@@ -1,10 +1,15 @@
-[gd_scene load_steps=3 format=3 uid="uid://crogruuo05d0i"]
+[gd_scene load_steps=6 format=3 uid="uid://crogruuo05d0i"]
+
+[ext_resource type="Script" uid="uid://d04ht3qkyv2ax" path="res://Scripts/Player/player.gd" id="1_s0eop"]
+[ext_resource type="Script" uid="uid://bh033l2welswn" path="res://Scripts/Player/Camera/spring_arm_pivot.gd" id="2_ft8w5"]
+[ext_resource type="Script" uid="uid://cw81lp7stvbbn" path="res://Scripts/Player/Camera/camera_follow.gd" id="3_h54ih"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_l3ax4"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_l3ax4"]
 
 [node name="Player" type="CharacterBody3D"]
+script = ExtResource("1_s0eop")
 
 [node name="Collisao" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -16,8 +21,17 @@ shape = SubResource("CapsuleShape3D_l3ax4")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 mesh = SubResource("CapsuleMesh_l3ax4")
 
-[node name="SpringArmCamera" type="SpringArm3D" parent="."]
+[node name="SpringArmPivot" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+script = ExtResource("2_ft8w5")
+min_vertical_angle = -1.0472
+
+[node name="SpringArmCamera" type="SpringArm3D" parent="SpringArmPivot"]
 spring_length = 5.0
 
-[node name="Camera3D" type="Camera3D" parent="SpringArmCamera"]
+[node name="SpringPosition" type="Node3D" parent="SpringArmPivot/SpringArmCamera"]
+
+[node name="Camera3D" type="Camera3D" parent="SpringArmPivot" node_paths=PackedStringArray("spring_arm")]
+script = ExtResource("3_h54ih")
+spring_arm = NodePath("../SpringArmCamera/SpringPosition")
+lerp_power = 5.0

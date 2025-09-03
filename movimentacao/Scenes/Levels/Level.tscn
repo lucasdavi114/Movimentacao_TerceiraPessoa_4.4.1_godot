@@ -1,5 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://8vqbydne7e04"]
+[gd_scene load_steps=9 format=3 uid="uid://8vqbydne7e04"]
 
+[ext_resource type="Script" uid="uid://cax40xrwkbsam" path="res://Scenes/Levels/level.gd" id="1_02k47"]
 [ext_resource type="PackedScene" uid="uid://crogruuo05d0i" path="res://Scenes/Player/Player.tscn" id="1_echjq"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_echjq"]
@@ -15,10 +16,18 @@ sky = SubResource("Sky_02k47")
 tonemap_mode = 2
 glow_enabled = true
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_83hsi"]
-albedo_color = Color(1, 0.854902, 0.643137, 1)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_echjq"]
+albedo_color = Color(1, 0.589939, 0.46944, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_02k47"]
+material = SubResource("StandardMaterial3D_echjq")
+size = Vector3(50, 0.5, 50)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_echjq"]
+size = Vector3(50, 0.5, 50)
 
 [node name="Level" type="Node3D"]
+script = ExtResource("1_02k47")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_bk2yi")
@@ -29,7 +38,13 @@ shadow_enabled = true
 
 [node name="Player" parent="." instance=ExtResource("1_echjq")]
 
-[node name="Floor" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
-material_override = SubResource("StandardMaterial3D_83hsi")
-size = Vector3(20, 1, 20)
+[node name="Floor" type="StaticBody3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3, 0)
+mesh = SubResource("BoxMesh_02k47")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3, 0)
+shape = SubResource("BoxShape3D_echjq")
